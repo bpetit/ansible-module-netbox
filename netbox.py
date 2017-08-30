@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 
 from ansible.module_utils.basic import AnsibleModule
-from netboxapi_client import Api, create, get, update
+from netboxapi_client import Api, create, get, update, delete
 from pprint import pprint
 from jinja2 import Environment, meta, FileSystemLoader
 import json
@@ -28,8 +28,8 @@ def main():
             obj       = dict(required=True),
             token     = dict(required=True),
             url       = dict(required=True),
-            state     = dict(required=True),
-            template  = dict(required=True)
+            state     = dict(required=True, choices=['present', 'absent']),
+            template  = dict(required=False)
         ),
         # supports_check_mode=True,
         mutually_exclusive = [ ('name', 'ident') ]
@@ -44,10 +44,11 @@ def main():
 
     res = {}
 
+    current = get(api, model=module.params['model'], obj=module.params['obj'], ident=module.params['ident'], name=module.params['name'])
+
     # state = present
     if module.params['state'] == 'present' and 'template' in module.params:
         # get current object
-        current = get(api, model=module.params['model'], obj=module.params['obj'], ident=module.params['ident'], name=module.params['name'])
         # get the data from the template
         template = module.params['template']
         env = Environment(
@@ -63,10 +64,14 @@ def main():
             else:
                 res = update(api, model=module.params['model'], obj=module.params['obj'], name=module.params['name'], ident=module.params['ident'], data=data)
             if 200 <= res.status_code <=299:
-                # the requests suceeded
+                # the request suceeded
                 changed=True
 
         result = res.json()
+    elif module.params['state'] == 'absent':
+        res = delete(api, model=module.params['model'], obj=module.params['obj'], name=module.params['name'], ident=module.params['ident'])
+        result = res.json()
+
     module.exit_json(changed=changed, result=result)
 
 if __name__ == '__main__':
