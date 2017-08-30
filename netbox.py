@@ -40,6 +40,8 @@ def main():
         token=module.params['token']
     )
 
+    changed = False
+
     res = {}
 
     # state = present
@@ -55,16 +57,17 @@ def main():
         data = json.loads(template.render().replace("'", "\""))
         res = data
         # if current object data and required object data are the same
-        if json_are_the_same(current, res):
-            module.exit_json(changed=False, result=res, ansible_facts=res)
-        # if not
-        else:
+        if not json_are_the_same(current, res):
             if 'detail' in current and current['detail'] == 'Not found.':
                 res = create(api, model=module.params['model'], obj=module.params['obj'], name=module.params['name'], ident=module.params['ident'], data=data)
             else:
                 res = update(api, model=module.params['model'], obj=module.params['obj'], name=module.params['name'], ident=module.params['ident'], data=data)
+            if 200 <= res.status_code <=299:
+                # the requests suceeded
+                changed=True
+
         result = res.json()
-    module.exit_json(changed=True, result=result)
+    module.exit_json(changed=changed, result=result)
 
 if __name__ == '__main__':
     main()
