@@ -60,9 +60,9 @@ def main():
         # if not
         else:
             if 'detail' in current and current['detail'] == 'Not found.':
-                res = create(api, model=module.params['model'], obj=module.params['obj'], name=module.params['name'], data=data)
+                res = create(api, model=module.params['model'], obj=module.params['obj'], name=module.params['name'], ident=module.params['ident'], data=data)
             else:
-                res = update(api, model=module.params['model'], obj=module.params['obj'], name=module.params['name'], data=data)
+                res = update(api, model=module.params['model'], obj=module.params['obj'], name=module.params['name'], ident=module.params['ident'], data=data)
         result = res.json()
     module.exit_json(changed=True, result=result)
 
