@@ -1,4 +1,4 @@
-#!/usr/bin/python3
+#!/usr/bin/python
 
 from ansible.module_utils.basic import AnsibleModule
 from netboxapi_client import Api, get_list, get
