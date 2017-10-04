@@ -44,7 +44,12 @@ def main():
 
     res = {}
 
-    current = get(api, model=module.params['model'], obj=module.params['obj'], ident=module.params['ident'], name=module.params['name'])
+    current = get(
+      api, model=module.params['model'],
+      obj=module.params['obj'],
+      ident=module.params['ident'],
+      name=module.params['name']
+    )
 
     # state = present
     if module.params['state'] == 'present' and 'template' in module.params:
@@ -60,12 +65,12 @@ def main():
         # if current object data and required object data are the same
         if not json_are_the_same(current, res):
             if 'detail' in current and current['detail'] == 'Not found.':
-                res = create(api, model=module.params['model'], obj=module.params['obj'], name=module.params['name'], ident=module.params['ident'], data=data)
+                 res = create(api, model=module.params['model'], obj=module.params['obj'], name=module.params['name'], ident=module.params['ident'], data=data)
             else:
-                res = update(api, model=module.params['model'], obj=module.params['obj'], name=module.params['name'], ident=module.params['ident'], data=data)
+                 res = update(api, model=module.params['model'], obj=module.params['obj'], name=module.params['name'], ident=module.params['ident'], data=data)
             if 200 <= res.status_code <=299:
                 # the request suceeded
-                changed=True
+                 changed=True
 
         result = res.json()
     elif module.params['state'] == 'absent':
