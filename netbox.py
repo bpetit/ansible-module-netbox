@@ -21,6 +21,12 @@ def json_are_the_same(first, second):
                  json_are_the_same(first[k], second[k])
     return res
 
+def missing_field(res):
+    for k, v in res.items():
+        if type(v) is list and 'is required' in v[0]:
+            return True
+    return False
+
 def main():
     module = AnsibleModule(
         argument_spec = dict(
@@ -77,7 +83,13 @@ def main():
                  res = update(api, model=module.params['model'], obj=module.params['obj'], name=module.params['name'], ident=module.params['ident'], data=data)
 
             # if update failed because of already used slug or name
-            if "already exists" in res['name'][0] or "already exists" in res['slug'][0]:
+            if ('name' in res and "already exists" in res['name'][0]) or ('slug' in res and "already exists" in res['slug'][0]):
+                changed=False
+                failed=False
+            elif 'non_field_errors' in res:
+                changed=False
+                failed=False
+            elif missing_field(res):
                 changed=False
                 failed=True
             else:

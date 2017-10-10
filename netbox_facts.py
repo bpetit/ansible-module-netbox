@@ -39,7 +39,7 @@ def main():
         res = get(api, model=module.params['model'], obj=module.params['obj'], ident=module.params['ident'])
         ansible_facts['netbox_result'] = res
 
-    module.exit_json(changed=True, result=res, ansible_facts=ansible_facts)
+    module.exit_json(changed=False, result=res, ansible_facts=ansible_facts)
 
 if __name__ == '__main__':
     main()
