@@ -80,6 +80,24 @@ requirements:
     - netboxapi_client >= 0.1
 '''
 
+EXAMPLES = '''
+    - name: get data from device sw-02-par-eq3
+      netbox_facts:
+        url: 'http:/netbox.example.org/'
+        token: 'OhshohghaiCiezuaha8quiech6quie2thu3fee5eb2zeKai1ie'
+        model: 'dcim'
+        obj: 'devices'
+        name: 'sw-02-par-eq3'
+    - debug: var=netbox_result
+    - name: get the list of ip subnet aggregates stored in netbox
+      netbox_facts:
+        url: 'http:/netbox.example.org/'
+        token: 'OhshohghaiCiezuaha8quiech6quie2thu3fee5eb2zeKai1ie'
+        model: 'ipam'
+        obj: 'aggregates'
+    - debug: var=netbox_result
+'''
+
 def main():
     module = AnsibleModule(
         argument_spec = dict(

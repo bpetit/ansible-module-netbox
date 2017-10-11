@@ -99,6 +99,20 @@ requirements:
     - netboaxapi_client >= 0.1
 '''
 
+EXAMPLES = '''
+- netbox:
+    url: "http:/netbox.example.org/"
+    token: "OhshohghaiCiezuaha8quiech6quie2thu3fee5eb2zeKai1ie"
+    model: "dcim"
+    obj: "device-roles"
+    state: 'present'
+    name: 'VM'
+    data:
+      name: 'VM'
+      color: 'ffffff'
+      slug: 'VM'
+'''
+
 from ansible.module_utils.basic import AnsibleModule
 from netboxapi_client import Api, create, get, update, delete
 from pprint import pprint
