@@ -96,11 +96,12 @@ notes:
     - model, obj, data parameters and template content depends on the Netbox API
 	- The description of those parameters may evolve with the API
 requirements:
-    - netboaxapi_client >= 0.1
+    - netboxapi_client >= 0.1
 '''
 
 EXAMPLES = '''
-- netbox:
+- name: add a device role for virtual machines
+  netbox:
     url: "http:/netbox.example.org/"
     token: "OhshohghaiCiezuaha8quiech6quie2thu3fee5eb2zeKai1ie"
     model: "dcim"
