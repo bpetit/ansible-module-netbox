@@ -1,4 +1,103 @@
-#!/usr/bin/python3
+#!/usr/bin/python
+# Copyright (c) 2017 Ansible Project
+# GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
+
+ANSIBLE_METADATA = {'metadata_version': '1.1', 'status': ['preview'], 'supported_by': 'community'}
+
+DOCUMENTATION = '''
+---
+# If a key doesn't apply to your module (ex: choices, default, or
+# aliases) you can use the word 'null', or an empty list, [], where
+# appropriate.
+#
+# See http://docs.ansible.com/ansible/dev_guide/developing_modules_documenting.html for more information
+#
+module: netbox
+short_description: Permits to create, update or delete objects in netbox ipam and dcim tool (https://github.com/digitalocean/netbox)
+description:
+    - 
+    - You might include instructions.
+version_added: "2.4"
+author: "Benoit Petit (@bpetit)"
+options:
+# One or more of the following
+	url:
+		description:
+			- URL of the target Netbox instance
+			- In the form: http://mynetbox.example.org or https://mynetbox.example.org
+		required: true
+		default: null
+	token:
+		description:
+			- Token used to permit requests to netbox API
+			- This is a string
+			- You can generate one by getting on a netbox user profile page
+		required: true
+		default: null
+	model:
+		description:
+			- Defines which "category" of objects you want to edit
+		choices:
+			- dcim
+			- ipam
+			- circuits
+			- secrets
+			- tenancy
+			- extras
+		required: true
+		default: null
+	obj:
+		description:
+			- Defines which kind of object you want to edit
+			- Choices depend on the choosed model. Here is the available options:
+			- http://netbox.readthedocs.io/en/latest/data-model/dcim/
+			- http://netbox.readthedocs.io/en/latest/data-model/circuits/
+			- http://netbox.readthedocs.io/en/latest/data-model/ipam/
+			- http://netbox.readthedocs.io/en/latest/data-model/secrets/
+			- http://netbox.readthedocs.io/en/latest/data-model/tenancy/
+			- http://netbox.readthedocs.io/en/latest/data-model/extras/
+		required: true
+		default: null
+	state:
+		description:
+			- If the object is present or absent
+		choices:
+			- present
+			- absent
+		required: true
+		default: present
+	name:
+		description:
+			- Name of the object
+		required: true
+		default: null
+	template:
+		description:
+			- Path to a jinja2 template that provides data for the object
+			- This is a quoted string like 'templates/myobject.j2'
+		required: false
+		default: null
+	data:
+		description:
+			- Dictionnary set of data for the object
+			- Has to exist if template is not here
+			- Example:
+			-	...
+			-	model: dcim
+			-	obj: sites
+			-	data:
+			-		name: 'testsite'
+			-		slug: 'testsite'
+			-		asn: 64542
+			-	...
+		required: false
+		default: null
+notes:
+    - model, obj, data parameters and template content depends on the Netbox API
+	- The description of those parameters may evolve with the API
+requirements:
+    - netboaxapi_client >= 0.1
+'''
 
 from ansible.module_utils.basic import AnsibleModule
 from netboxapi_client import Api, create, get, update, delete
