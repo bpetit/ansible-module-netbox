@@ -4,6 +4,82 @@ from ansible.module_utils.basic import AnsibleModule
 from netboxapi_client import Api, get_list, get
 import json
 
+ANSIBLE_METADATA = {'metadata_version': '1.1', 'status': ['preview'], 'supported_by': 'community'}
+
+DOCUMENTATION = '''
+---
+# If a key doesn't apply to your module (ex: choices, default, or
+# aliases) you can use the word 'null', or an empty list, [], where
+# appropriate.
+#
+# See http://docs.ansible.com/ansible/dev_guide/developing_modules_documenting.html for more information
+#
+module: netbox_facts
+short_description: Queries netbox api and stores result as ansible facts
+description:
+    - This is to be used with netbox (https://github.com/digitalocean/netbox)
+    - Permits to get data stored in netbox as ansible facts.
+	- Useful to use those data as variables in your playbooks.
+version_added: "2.4"
+author: "Benoit Petit (@bpetit)"
+options:
+# One or more of the following
+	url:
+		description:
+			- URL of the target Netbox instance
+			- In the form: http://mynetbox.example.org or https://mynetbox.example.org
+		required: true
+		default: null
+	token:
+		description:
+			- Token used to permit requests to netbox API
+			- This is a string
+			- You can generate one by getting on a netbox user profile page
+		required: true
+		default: null
+	model:
+		description:
+			- Defines which "category" of objects you want to edit
+		choices:
+			- dcim
+			- ipam
+			- circuits
+			- secrets
+			- tenancy
+			- extras
+		required: true
+		default: null
+	obj:
+		description:
+			- Defines which kind of object you want to edit
+			- Choices depend on the choosed model. Here is the available options:
+			- http://netbox.readthedocs.io/en/latest/data-model/dcim/
+			- http://netbox.readthedocs.io/en/latest/data-model/circuits/
+			- http://netbox.readthedocs.io/en/latest/data-model/ipam/
+			- http://netbox.readthedocs.io/en/latest/data-model/secrets/
+			- http://netbox.readthedocs.io/en/latest/data-model/tenancy/
+			- http://netbox.readthedocs.io/en/latest/data-model/extras/
+		required: true
+		default: null
+	name:
+		description:
+			- Name of the object you want to get informations from
+			- You should provide either this parameter or ident
+		required: false
+		default: null	
+	ident:
+		description:
+			- Numerical identifier of the object you want to get informations from.
+			- You should provide either this parameter of name.
+		required: false
+		default: null
+notes:
+	- To use this module locally, use connection: local
+    - This module is handy to use with netbox module
+requirements:
+    - netboxapi_client >= 0.1
+'''
+
 def main():
     module = AnsibleModule(
         argument_spec = dict(
