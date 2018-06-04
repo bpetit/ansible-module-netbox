@@ -115,7 +115,7 @@ EXAMPLES = '''
 '''
 
 from ansible.module_utils.basic import AnsibleModule
-from netboxapi_client import Api, create, get, update, delete
+from netboxapi_client.netboxapi_client import Api, create, get, update, delete
 from pprint import pprint
 from jinja2 import Environment, meta, FileSystemLoader
 import json

@@ -1,7 +1,7 @@
 #!/usr/bin/python
 
 from ansible.module_utils.basic import AnsibleModule
-from netboxapi_client import Api, get_list, get
+from netboxapi_client.netboxapi_client import Api, get_list, get
 import json
 
 ANSIBLE_METADATA = {'metadata_version': '1.1', 'status': ['preview'], 'supported_by': 'community'}
